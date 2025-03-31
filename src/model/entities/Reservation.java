@@ -39,9 +39,21 @@ public class Reservation {
 		return diff;
 	}
 	
-	public void updateDates(LocalDate checkIn, LocalDate checkOut) {
+	public String updateDates(LocalDate checkIn, LocalDate checkOut) {
+		
+		if(checkIn.isBefore(LocalDate.now()) || checkOut.isBefore(LocalDate.now())) {
+			return "Error in reservation: Reservation dates for updates must be futures dates!";
+			
+		}
+		if(!checkOut.isAfter(checkIn)) {
+			return "Error in reservation!";
+			
+		}
+		
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
+		
+		return null;
 	}
 	
 	public String toString() {
