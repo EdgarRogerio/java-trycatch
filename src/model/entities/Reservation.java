@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
+import model.exceptions.DomainException;
+
 public class Reservation {
 	
 	private Integer roomNumber;
@@ -12,7 +14,13 @@ public class Reservation {
 	
 	private static DateTimeFormatter dtf1 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	
-	public Reservation(Integer roomNumber, LocalDate checkIn, LocalDate checkOut) {
+	public Reservation(Integer roomNumber, LocalDate checkIn, LocalDate checkOut) throws DomainException {
+		
+		if(!checkOut.isAfter(checkIn)) {
+			throw new DomainException("Error in reservation!");
+			
+		}
+		
 		this.roomNumber = roomNumber;
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
@@ -39,21 +47,21 @@ public class Reservation {
 		return diff;
 	}
 	
-	public String updateDates(LocalDate checkIn, LocalDate checkOut) {
+	public void updateDates(LocalDate checkIn, LocalDate checkOut) throws DomainException {
 		
 		if(checkIn.isBefore(LocalDate.now()) || checkOut.isBefore(LocalDate.now())) {
-			return "Error in reservation: Reservation dates for updates must be futures dates!";
+			throw new DomainException("Error in reservation: Reservation dates for updates must be futures dates!");
 			
 		}
 		if(!checkOut.isAfter(checkIn)) {
-			return "Error in reservation!";
+			throw new DomainException("Error in reservation!");
 			
 		}
 		
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
 		
-		return null;
+		
 	}
 	
 	public String toString() {
